@@ -3,14 +3,15 @@
 from itertools import *
 
 from data import make_departments_data, make_employees_data
+from constants import PROPERTY_ID, PROPERTY_PARENT_ID
 
 departments = make_departments_data()
 employees = make_employees_data()
 
 
-def get_department():
-    for department in departments:
-        yield department
+def select_table(table):
+    for entity in table:
+        yield entity
 
 
 def where(structure, column, value):
@@ -32,15 +33,5 @@ def select_columns(entity, colums):
             print("key = {} , value = {}".format(key, value))
 
 
-def command1():
-    query = where(get_department(), "ID", 5)
-
-    for i in query:
-        print(i)
-
-
-def command2():
-    query = join(departments, employees, "ID", "Department-ID")
-
-    for i in query:
-        select_columns(i, ("ID", "Firstname"))
+def sum(structure):
+    return len(structure)
