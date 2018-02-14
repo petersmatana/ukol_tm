@@ -97,4 +97,12 @@ def make_employees_data():
         PROPERTY_BIRTHDATE: "20.08.1986",
     }
 
-    return e1, e2
+    e3 = {
+        PROPERTY_ID: 3,
+        PROPERTY_FIRSTNAME: "Supp",
+        PROPERTY_SURNAME: "Ort",
+        PROPERTY_DEPARTMENT_ID: 2,
+        PROPERTY_BIRTHDATE: "01.01.1970",
+    }
+
+    return e1, e2, e3
