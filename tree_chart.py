@@ -58,7 +58,6 @@ class TreeChart(object):
     def tree_to_list_of_dicts(self, tree):
         result = list()
         for element in self.breadth_fist_walk(tree):
-            # result.append(element.node)
-            print(element)
+            result.append(element.node)
 
         return result

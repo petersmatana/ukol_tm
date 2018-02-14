@@ -2,7 +2,7 @@
 
 from datetime import datetime, timedelta
 from numpy import mean, sum
-from sys import stdin
+from sys import stdin, argv
 
 from query_language import select_table, where, join, sum, \
     select_columns
@@ -10,7 +10,9 @@ from tree_chart import TreeChart
 from data import make_departments_data, make_employees_data
 from constants import PROPERTY_ID, PROPERTY_DEPARTMENT_ID, \
     PROPERTY_FIRSTNAME, PROPERTY_SURNAME, PROPERTY_BIRTHDATE, \
-    PROPERTY_DEPARTMENT_NAME, PROPERTY_DEPARTMENT_CITY
+    PROPERTY_DEPARTMENT_NAME, PROPERTY_DEPARTMENT_CITY, \
+    CSV_TYPE_DEPARTMENT, CSV_TYPE_EMPLOYEE
+from csv_loader import load_file
 
 
 def command1(department_id):
@@ -105,6 +107,8 @@ def command4(department_id):
 
 
 def user_input():
+    print("your command: ")
+
     while 1:
         try:
             line = stdin.readline()
@@ -113,6 +117,7 @@ def user_input():
         if not line:
             break
 
+        print("your command: ")
         split = line.split(" ")
 
         if split[0] == "Department":
@@ -130,5 +135,16 @@ def user_input():
         print("bad command")
 
 
+def process_csv_files():
+    if len(argv) != 3:
+        print("need csv file with departments and employees")
+
+    # print(load_file(argv[1], CSV_TYPE_DEPARTMENT))
+
+    # print(load_file(argv[2], CSV_TYPE_EMPLOYEE))
+
+
+# python orgchart.py /home/smonty/Downloads/orgchart-data.csv /home/smonty/Downloads/employees-data.csv
 if __name__ == "__main__":
+    process_csv_files()
     user_input()
