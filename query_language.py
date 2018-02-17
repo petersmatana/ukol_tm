@@ -2,11 +2,7 @@
 
 from itertools import *
 
-from data import make_departments_data, make_employees_data
 from constants import PROPERTY_ID, PROPERTY_PARENT_ID
-
-departments = make_departments_data()
-employees = make_employees_data()
 
 
 def select_table(table):

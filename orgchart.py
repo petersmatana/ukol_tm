@@ -3,6 +3,7 @@
 from datetime import datetime, timedelta
 from numpy import mean, sum
 from sys import stdin, argv
+import pprint
 
 from query_language import select_table, where, join, sum, \
     select_columns
@@ -15,7 +16,7 @@ from constants import PROPERTY_ID, PROPERTY_DEPARTMENT_ID, \
 from csv_loader import load_file
 
 
-def command1(department_id):
+def command1(department, department_id):
     """
     Get department name and city for department ID.
 
@@ -24,13 +25,13 @@ def command1(department_id):
     :param department_id: Department ID
     """
 
-    query = where(select_table(make_departments_data()), "ID", department_id)
+    query = where(select_table(department), "ID", department_id)
 
     for i in query:
         print("{}, {}".format(i[PROPERTY_DEPARTMENT_NAME], i[PROPERTY_DEPARTMENT_CITY]))
 
 
-def command2(department_id):
+def command2(department, employee, department_id):
     """
     Get number of employees in department. It is whole department and it's
     sub-departments.
@@ -41,11 +42,11 @@ def command2(department_id):
     """
 
     tree = TreeChart(node="root")
-    created_tree = tree.create_tree()
+    created_tree = tree.create_tree(department)
 
     t = tree.get_subtree(created_tree, department_id)
 
-    query = join([element.node for element in t], make_employees_data(), "ID", "Department-ID")
+    query = join([element.node for element in t], employee, "ID", "Department-ID")
 
     count = 0
     for _ in query:
@@ -54,7 +55,7 @@ def command2(department_id):
     print(count)
 
 
-def command3(department_id):
+def command3(department, employee, department_id):
     """
     Get firstname and surname for employees in department and it's
     sub-departments.
@@ -65,18 +66,18 @@ def command3(department_id):
     """
 
     tree = TreeChart(node="root")
-    created_tree = tree.create_tree()
+    created_tree = tree.create_tree(department)
 
     t = tree.get_subtree(created_tree, department_id)
 
-    query = join([element.node for element in t], make_employees_data(),
+    query = join([element.node for element in t], employee,
                  PROPERTY_ID, PROPERTY_DEPARTMENT_ID)
 
     for x in query:
         print(x[PROPERTY_FIRSTNAME], x[PROPERTY_SURNAME])
 
 
-def command4(department_id):
+def command4(department, employee, department_id):
     """
     Get average of age for employees in department and it's
     sub-departments.
@@ -87,11 +88,11 @@ def command4(department_id):
     """
 
     tree = TreeChart(node="root")
-    created_tree = tree.create_tree()
+    created_tree = tree.create_tree(department)
 
     t = tree.get_subtree(created_tree, department_id)
 
-    query = join([element.node for element in t], make_employees_data(),
+    query = join([element.node for element in t], employee,
                  PROPERTY_ID, PROPERTY_DEPARTMENT_ID)
 
     result = list()
@@ -106,7 +107,7 @@ def command4(department_id):
         print("0")
 
 
-def user_input():
+def user_input(department, employee):
     print("your command: ")
 
     while 1:
@@ -121,16 +122,16 @@ def user_input():
         split = line.split(" ")
 
         if split[0] == "Department":
-            command1(int(split[1]))
+            command1(department, int(split[1]))
             continue
         if split[0] == "Count":
-            command2(int(split[1]))
+            command2(department, employee, int(split[1]))
             continue
         if split[0] == "People":
-            command3(int(split[1]))
+            command3(department, employee, int(split[1]))
             continue
         if split[0] == "Average":
-            command4(int(split[1]))
+            command4(department, employee, int(split[1]))
             continue
         print("bad command")
 
@@ -139,12 +140,25 @@ def process_csv_files():
     if len(argv) != 3:
         print("need csv file with departments and employees")
 
-    # print(load_file(argv[1], CSV_TYPE_DEPARTMENT))
+    department = load_file(argv[1], CSV_TYPE_DEPARTMENT)
+    employee = load_file(argv[2], CSV_TYPE_EMPLOYEE)
 
-    # print(load_file(argv[2], CSV_TYPE_EMPLOYEE))
+    return department, employee
 
 
 # python orgchart.py /home/smonty/Downloads/orgchart-data.csv /home/smonty/Downloads/employees-data.csv
 if __name__ == "__main__":
-    process_csv_files()
-    user_input()
+    department, employee = process_csv_files()
+
+    user_input(department, employee)
+
+    '''
+    pp = pprint.PrettyPrinter(indent=3)
+    pp.pprint(department)
+    pp.pprint(employee)
+    
+    command1(department, 1)
+    command2(department, employee, 1)
+    command3(department, employee, 1)
+    command4(department, employee, 1)
+    '''

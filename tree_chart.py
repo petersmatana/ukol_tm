@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from query_language import select_table, departments
+from query_language import select_table #, departments
 from constants import PROPERTY_ID, PROPERTY_PARENT_ID
 
 
@@ -25,7 +25,7 @@ class TreeChart(object):
             else:
                 self._insert_into_tree(tmp, element)
 
-    def create_tree(self):
+    def create_tree(self, departments):
         root = TreeChart("root")
 
         query = select_table(departments)

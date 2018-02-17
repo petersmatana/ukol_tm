@@ -30,23 +30,26 @@ def _replace_empty_cell():
     return lambda x: x if len(x) > 0 else None
 
 
+def _to_int_or_none():
+    return lambda x: int(x) if x else None
+
+
 def _department_csv_file(row):
+    convert = _to_int_or_none()
+
     return {
-        PROPERTY_ID: row[0],
-        PROPERTY_PARENT_ID: row[1],
+        PROPERTY_ID: int(row[0]),
+        PROPERTY_PARENT_ID: convert(row[1]),
         PROPERTY_DEPARTMENT_NAME: row[2],
         PROPERTY_DEPARTMENT_CITY: row[3],
     }
 
 
 def _employee_csv_file(row):
-
-    print(row)
-
     return {
-        PROPERTY_ID: row[0],
+        PROPERTY_ID: int(row[0]),
         PROPERTY_FIRSTNAME: row[1],
         PROPERTY_SURNAME: row[2],
-        PROPERTY_DEPARTMENT_ID: row[3],
+        PROPERTY_DEPARTMENT_ID: int(row[3]),
         PROPERTY_BIRTHDATE: row[4],
     }
