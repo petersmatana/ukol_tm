@@ -2,9 +2,9 @@
 
 import pytest
 
-from data import make_departments_data, make_employees_data
 from constants import PROPERTY_ID, PROPERTY_PARENT_ID, \
     PROPERTY_DEPARTMENT_NAME, PROPERTY_DEPARTMENT_CITY
+from test.data import make_departments_data, make_employees_data
 
 
 @pytest.fixture(scope="function")
