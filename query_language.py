@@ -30,4 +30,8 @@ def select_columns(entity, colums):
 
 
 def sum(structure):
-    return len(structure)
+    count = 0
+    for _ in structure:
+        count += 1
+
+    return count
