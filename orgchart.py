@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 
+import pprint
 from datetime import datetime, timedelta
 from numpy import mean, sum
 from sys import stdin, argv
-import pprint
 
-from query_language import select_table, where, join, sum, \
-    select_columns
-from tree_chart import TreeChart
-from data import make_departments_data, make_employees_data
 from constants import PROPERTY_ID, PROPERTY_DEPARTMENT_ID, \
     PROPERTY_FIRSTNAME, PROPERTY_SURNAME, PROPERTY_BIRTHDATE, \
     PROPERTY_DEPARTMENT_NAME, PROPERTY_DEPARTMENT_CITY, \
     CSV_TYPE_DEPARTMENT, CSV_TYPE_EMPLOYEE
 from csv_loader import load_file
+from query_language import select_table, where, join, sum, \
+    select_columns
+from test.data import make_departments_data, make_employees_data
+from tree_chart import TreeChart
 
 
 def command1(department, department_id):
@@ -46,13 +46,9 @@ def command2(department, employee, department_id):
 
     t = tree.get_subtree(created_tree, department_id)
 
-    query = join([element.node for element in t], employee, "ID", "Department-ID")
+    query = sum(join([element.node for element in t], employee, "ID", "Department-ID"))
 
-    count = 0
-    for _ in query:
-        count += 1
-
-    print(count)
+    print(query)
 
 
 def command3(department, employee, department_id):
@@ -146,19 +142,23 @@ def process_csv_files():
     return department, employee
 
 
-# python orgchart.py /home/smonty/Downloads/orgchart-data.csv /home/smonty/Downloads/employees-data.csv
-if __name__ == "__main__":
+def test():
     department, employee = process_csv_files()
 
-    user_input(department, employee)
-
-    '''
     pp = pprint.PrettyPrinter(indent=3)
     pp.pprint(department)
     pp.pprint(employee)
-    
+
     command1(department, 1)
     command2(department, employee, 1)
     command3(department, employee, 1)
     command4(department, employee, 1)
-    '''
+
+
+# python orgchart.py /home/smonty/Downloads/orgchart-data.csv /home/smonty/Downloads/employees-data.csv
+if __name__ == "__main__":
+    # test()
+
+    department, employee = process_csv_files()
+
+    user_input(department, employee)
